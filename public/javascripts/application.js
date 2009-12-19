@@ -23,14 +23,12 @@ $(function() {
     var new_id  = new Date().getTime();
     var new_name = name_context + '[' + assoc + 's_attributes][' + new_id + ']';
     content     = content.replace(regexp, new_name);
+
     // Now replace id strings
-    var id_string = new_name.replace(new RegExp('\\]\\[', 'g'), '_').
-                             replace(new RegExp('\\['), '_').
-                             replace(new RegExp('\\]'), '_').
-                             replace(new RegExp('s_attributes'), '').
-                             replace(new RegExp('_$'), '');
+    var id_string = new_name.replace( /\]\[|\[|\]/g, '_').replace( /s_attributes/, '').replace(/_$/, '');
     content = content.replace(new RegExp(assoc +'_new_' + assoc, 'g'), id_string).
                       replace(new RegExp('new_' + assoc, 'g'), id_string);
+    
     // fix the enclosed data context
     content = content.replace(new RegExp("data-context\=." + assoc + ".", 'g'), 'data-context="'+ new_name + '"');
     
@@ -39,11 +37,14 @@ $(function() {
   });
   
   $('form a.remove_template').live('click', function() {
+    // guard against unintended deletion
+    if( ! confirm("Are you sure you want to delete this?") ) { return false; }
+    
     var hidden_field = $(this).prev('input[type=hidden]')[0];
     if(hidden_field) {
       hidden_field.value = '1';
     }
-    $(this).parent('.fields').hide();
+    $(this).parent('.' + $(this).attr('data-model')).hide();
     return false;
   });
 });

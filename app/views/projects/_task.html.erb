@@ -1,8 +1,19 @@
 <div class="fields">
   <%= f.label :name, "Task" %>
   <%= f.text_field :name %>
-  <%= remove_child_link "remove", f %>
-  <%# Alternatively you can use a check box: %>
-  <%# f.check_box :_delete %>
-  <%# f.label :_delete, "(remove)" %>
+  <%= remove_child_link "remove", '#', f %>
+  <div class="children_fields assignments" id="<%= dom_id(f.object) %>_assignments" data-context="<%= f.object_name %>">
+    <% f.fields_for :assignments do |assignment_form| %>
+      <%= render :partial => 'assignment', :locals => { :f => assignment_form } %>
+    <% end %>
+    <% f.fields_for :steps do |step_form| %>
+      <%= render :partial => 'step', :locals => { :f => step_form } %>
+    <% end %>
+  </div>  
+  <p>
+    <%= add_template_link("New Assignment", '#', Assignment, "##{dom_id(f.object)}_assignments") %>
+    <%= add_template_link("New Step", '#', Step, "##{dom_id(f.object)}_assignments") %>
+    <%#= add_child_link "New Assignment", :assignments %>
+  </p>
+  <%#= new_child_fields_template(f, :assignments)%>
 </div>

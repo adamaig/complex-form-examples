@@ -6,9 +6,22 @@
   </p>
   
   <h3>Tasks</h3>
-  <% f.fields_for :tasks do |task_form| %>
-    <%= render :partial => 'task', :locals => { :f => task_form } %>
-  <% end %>
-  <p><%= add_child_link "New Task", f, :tasks %></p>
+  <div class="children_fields tasks" id="<%= dom_id(f.object) %>_tasks" data-context="<%= f.object_name %>">
+    <% f.fields_for :tasks do |task_form| %>
+      <%= render :partial => 'task', :locals => { :f => task_form } %>
+    <% end %>    
+  </div>
+  <p>
+    <%= add_template_link("New Task", '#', Task, "##{dom_id(f.object)}_tasks") %>
+    <%#= add_child_link "New Task", :tasks %>
+  </p>
+  <%#= new_child_fields_template(f, :tasks)%>
   <p><%= f.submit "Submit" %></p>
 <% end %>
+
+<%= new_fields_template(Task, :partial => 'projects/task') %>
+<%= new_fields_template(Assignment, :partial => 'projects/assignment') %>
+<%= new_fields_template(Step, :partial => 'projects/step') %>
+<%= yield :task_template %>
+<%= yield :assignment_template %>
+<%= yield :step_template %>

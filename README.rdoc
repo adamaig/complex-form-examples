@@ -1,6 +1,17 @@
 = Complex Form Examples
 
-This master branch is a simple solution for the multi-model form problem using the latest +accepts_nested_attributes_for+ available in Rails 2.3.
+This branch is a solution for the multi-model form problem using the latest +accepts_nested_attributes_for+ available in Rails 2.3.
+
+This branch makes the templates location independent (in other branches they were created in the context of another form). 
+To demonstrate this in practice, Steps are polymorphically owned, either by a Task or an Assignment.
+
+This requires adding a few more attributes in the html. 
+
+The link to add a template now requires a data-target which should be a css selector that can be used to identify the 
+target container that the template will be appended into.
+
+The targeted container must have a data-context attribute that specifies the name (e.g., "project[task_attributes][2]") 
+that encloses the template.
 
 Once you clone this repository, just run the migrations and start up the server to try it out.
 

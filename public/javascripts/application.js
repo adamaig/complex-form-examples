@@ -7,8 +7,9 @@ $(function() {
     // Name of model underscored, Model.name.underscore
     var assoc   = $(this).attr('data-model');           
     var content = $('#' + assoc + '_template').html(); // Fields template
-    var dom_target = $(this).attr('data-target');
-
+    // var dom_target = $(this).attr('data-target');
+    
+    var dom_target = $(this).parent().siblings('.children_fields');
     // context will be something like this for a brand new form:
     // project[tasks_attributes][1255929127459][assignments_attributes][1255929128105]
     // or for an edit form:
@@ -22,8 +23,11 @@ $(function() {
     var regexp  = new RegExp(assoc + '\\[new_' + assoc + '\\]', 'g');
     var new_id  = new Date().getTime();
     var new_name = name_context + '[' + assoc + 's_attributes][' + new_id + ']';
+    // replaces the top-level names
     content     = content.replace(regexp, new_name);
-
+    // replaces name for any nested templates
+    content     = content.replace( new RegExp(assoc + '\\[','g'), new_name + '[');
+    
     // Now replace id strings
     var id_string = new_name.replace( /\]\[|\[|\]/g, '_').replace( /s_attributes/, '').replace(/_$/, '');
     content = content.replace(new RegExp(assoc +'_new_' + assoc, 'g'), id_string).

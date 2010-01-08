@@ -19,9 +19,18 @@
   <p><%= f.submit "Submit" %></p>
 <% end %>
 
-<%= new_fields_template(Task, :partial => 'projects/task') %>
+<%= 
+task = Task.new(:name => "new task")
+task.steps.build(:name => 'new')
+assignment = task.assignments.build(:owner => 'new')
+assignment.steps.build(:name => 'new')
+
+new_fields_template(Task, :object => task, :partial => 'projects/task') %>
+
 <%= new_fields_template(Assignment, :partial => 'projects/assignment') %>
+
 <%= new_fields_template(Step, :partial => 'projects/step') %>
+
 <%= yield :task_template %>
 <%= yield :assignment_template %>
 <%= yield :step_template %>
